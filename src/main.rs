@@ -14,19 +14,34 @@ use stylus_sdk::{alloy_primitives::U256, prelude::*};
 // Define storage structs we'll need.
 sol_storage! {
     // does stylus even pack structs?
-    pub struct Channel {
+    pub struct Funding {
         address counterparty0;
+        uint256 balance0;
         address counterparty1;
-        uint64 timestamp;
-        uint32 asset_id;
+        uint256 balance1;
+        address asset;
+        bytes sig0;
+        bytes sig1;
+    }
+
+    pub struct Commitment {
         uint256 balance0;
         uint256 balance1;
+        uint32 nonce;
+        bytes sig0;
+        bytes sig1;
+    }
+
+    pub struct Justice {
+        Commitment commitment;
+        uint64 timestamp;
     }
 
     #[entrypoint]
     pub struct Stasis {
-        mapping(address => Channel) channels;
-        mapping(uint32 => address) asset_ids;
+        mapping(uint256 => Funding) channels;
+        mapping(uint256 => Funding) justice_queue;
+        uint256 channel_ids;
     }
 }
 
@@ -34,18 +49,4 @@ sol_storage! {
 /// and increment method using the features of the Stylus SDK.
 #[external]
 impl Stasis {
-    pub fn register_asset(
-        &mut self, 
-        new_asset: Address,
-        index: u32
-    ) -> Result<(), Vec<u8>> {
-        if self.asset_ids.contains_key(index) {
-            return Err(b"Asset already registered");
-        }
-
-        self.asset_ids.insert(index, new_asset);
-    }
-
-    
-    
 }

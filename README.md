@@ -19,9 +19,7 @@ The initial funding transaction contains the addresses of the parties, token amo
 Contrary to the Lightning Network, commitment transactions do not represent transactions that can be broadcast to the network and do not include a time lock. A commitment transaction includes the following data:
 ```
 addresses and balances of counterparties:
-- address0 (address)
 - balance0(u256)
-- address1 (address)
 - balance1 (u256)
 commitment tx nonce:
 - nonce (u32)
